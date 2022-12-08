@@ -3,14 +3,15 @@ import { getAllChannelData } from "../utils/getAllData.js";
 import { newsContent } from "../component/newsBoxComponent/newsContent.js";
 let api = "https://api-berita-indonesia.vercel.app/";
 export const findBySort = async (channel = "all", category = "terbaru") => {
-  let news_content = document.getElementsByClassName("news-content")[0];
-
-  news_content.innerHTML = "Loading...";
+  let content_container = document.getElementsByClassName(
+    "news-content-container"
+  )[0];
+  content_container.innerHTML = "Loading...";
   if (channel != "all") {
     return response(channel, category)
       .then((value) => value.json())
       .then((data) => {
-        news_content.innerHTML = newsContent(data);
+        content_container.innerHTML = newsContent(data);
       });
   } else {
     let filtered = [];
@@ -33,9 +34,16 @@ export const findBySort = async (channel = "all", category = "terbaru") => {
         return res;
       })
       .then((res) => Promise.all(res.map((data) => data.json())))
-      .then((res) => {})
+      .then((res) => {
+        setTimeout(() => {
+          content_container.innerHTML = newsContent(res, true);
+        }, 5000);
+      })
       .catch(() => {
-        return alert("try to reload your browser");
+        setTimeout(() => {
+          alert("try to reload your browser");
+          location.reload();
+        }, 5000);
       });
   }
 };
