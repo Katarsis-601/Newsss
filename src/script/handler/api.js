@@ -1,12 +1,10 @@
-import { getAllChannelData } from "../utils/getAllData.js";
-
 export const response = async (channel = null, category = null) => {
   let api = "https://api-berita-indonesia.vercel.app/";
-  if ((channel != null) & (channel != "all")) {
-    api += `${channel}/`;
-    api += `${category}/`;
-  }
+
+  channel != null ? (api += `${channel}/${category}`) : null;
+
   const res = await fetch(api);
+
   return res;
 };
 

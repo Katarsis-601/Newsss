@@ -1,16 +1,26 @@
-import { response } from "../handler/api.js";
-
 export let getAllCategories = (value) => {
   let endpoint = value.endpoints;
   let category = [];
+  let filteredCategoryName = new Set();
 
   for (let name of endpoint) {
     for (let i in name.paths) {
       category.push(name.paths[i]);
+      filteredCategoryName.add(name.paths[i].name);
     }
   }
 
-  let allCategory = new Set(category);
+  let allCategory = [];
+
+  filteredCategoryName.forEach((name) => {
+    for (let data of category) {
+      if (data.name === name) {
+        allCategory.push(data);
+        break;
+      }
+    }
+  });
+
   return allCategory;
 };
 

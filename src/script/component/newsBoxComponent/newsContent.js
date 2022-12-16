@@ -1,7 +1,6 @@
 import { newsBox } from "./newsBox.js";
 
 export const newsContent = (data, isAll = false) => {
-  console.log(data);
   if (isAll) {
     return data.map((data) => {
       return `<div class="content flex flex-col m-4 flex-wrap">

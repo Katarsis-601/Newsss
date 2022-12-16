@@ -1,35 +1,33 @@
-import { listOfOption } from "../component/listOfOption.js";
+import listOfOption from "../component/listOfOption.js";
 import { findBySort } from "./findBySort.js";
+
+const channel_element = document.getElementsByClassName("channel-sort")[0];
+const category_element = document.getElementsByClassName("category-sort")[0];
+
+let listOfCategory = (i) => {
+  return listOfOption("category", i);
+};
 (() => {
-  const channel_sort_element =
-    document.getElementsByClassName("channel-sort")[0];
-  const category_sort_element =
-    document.getElementsByClassName("category-sort")[0];
+  let categorySortValue = "terbaru";
+  let channelSortValue = "all";
 
-  let listOfCategory = (i) => {
-    return listOfOption("category", i);
-  };
-
-  let channel_value = "all";
-  let category_value = "terbaru";
-
-  channel_sort_element.addEventListener("input", (event_channel) => {
-    channel_value =
-      event_channel.target.options[channel_sort_element.selectedIndex];
-    listOfCategory(channel_value.dataset.indexChannel).then((value) => {
-      category_sort_element.innerHTML = value;
-      category_value = category_sort_element[0].value;
-      findBySort(channel_value.value, category_value);
+  channel_element.addEventListener("input", (event_channel) => {
+    channelSortValue =
+      event_channel.target.options[channel_element.selectedIndex];
+    listOfCategory(channelSortValue.dataset.indexChannel).then((value) => {
+      category_element.innerHTML = value;
+      categorySortValue = category_element[0].value;
+      findBySort(channelSortValue.value, categorySortValue);
     });
   });
 
-  category_sort_element.addEventListener("input", (event_category) => {
-    category_value =
-      event_category.target.options[category_sort_element.selectedIndex].value;
-    findBySort(channel_value.value, category_value);
+  category_element.addEventListener("input", (event_category) => {
+    categorySortValue =
+      event_category.target.options[category_element.selectedIndex].value;
+    findBySort(channelSortValue.value, categorySortValue);
   });
 
   listOfCategory("all").then((value) => {
-    category_sort_element.innerHTML = value;
+    category_element.innerHTML = value;
   });
 })();
