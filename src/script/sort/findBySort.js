@@ -1,48 +1,37 @@
-import { response, responseAll } from "../handler/api";
-import { getAllChannelData } from "../utils/getAllData.js";
-import { newsContent } from "../component/newsBoxComponent/newsContent.js";
-let api = "https://api-berita-indonesia.vercel.app/";
-export function findBySort(channel = "all", category = "terbaru") {
-  let content_container = document.getElementsByClassName(
-    "news-content-container"
-  )[0];
+import { response, responseByCategory } from "../handler/api.js";
+import { newsContent } from "../components/newsBoxComponent/newsContent.js";
+import { filterChannelByCategory } from "../utils/filter.js";
 
-  content_container.innerHTML = "Loading...";
+let content_container = document.getElementsByClassName(
+  "news-content-container"
+)[0];
 
-  if (channel != "all") {
-    return response(channel, category)
-      .then((value) => value.json())
-      .then((data) => {
-        content_container.innerHTML = newsContent(data);
-      });
+export async function findBySort(channel = "all", category = "terbaru") {
+  content_container.innerHTML = "Loading....";
+
+  let filteredChannel;
+
+  if (channel === "all") {
+    filteredChannel = await filterChannelByCategory(category);
+
+    let responseNewsAll = responseByCategory(filteredChannel, category);
+
+    return await Promise.all(responseNewsAll)
+      .then((res) => res)
+      .then((res) => Promise.all(res.map((data) => data.json())))
+      .then(async (res) => {
+        if (res[0].message != "Not found") {
+          content_container.innerHTML = await newsContent(res, true);
+        } else {
+          content_container.innerHTML = "Tidak ada Berita";
+        }
+      })
+      .catch((err) => alert(err));
   }
-  let filteredChannel = [];
-  response()
-    .then((data) => data.json())
-    .then((value) => {
-      getAllChannelData(value).map((channel, index) => {
-        value.endpoints[index].paths.map((data) => {
-          if (data.name === category) {
-            filteredChannel.push(channel);
-          }
-        });
-      });
-    });
 
-  let responseNewsAll = filteredChannel.map(async (channel) => {
-    return await fetch(`${api}${channel}/${category}`);
-  });
-
-  return responseAll([...responseNewsAll])
-    .then((res) => res)
-    .then((res) => Promise.all(res.map((data) => data.json())))
-    .then((res) => {
-      content_container.innerHTML = newsContent(res, true);
-    })
-    .catch(() => {
-      setTimeout(() => {
-        alert("try to reload your browser");
-        location.reload();
-      }, 5000);
+  return await response(channel, category)
+    .then((value) => value.json())
+    .then(async (data) => {
+      content_container.innerHTML = await newsContent(data);
     });
 }

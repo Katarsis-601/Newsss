@@ -1,5 +1,6 @@
 import { response } from "../handler/api.js";
 import { getAllCategories } from "../utils/getAllData.js";
+import { option } from "./sortComponents/option.js";
 export default async function listOfOption(
   optionType,
   i = null,
@@ -7,7 +8,7 @@ export default async function listOfOption(
 ) {
   return await response()
     .then((res) => res.json())
-    .then((value) => {
+    .then(async (value) => {
       let listOfOption = [];
       let dataOfOption;
 
@@ -21,19 +22,9 @@ export default async function listOfOption(
         dataOfOption = value.endpoints;
       }
 
-      dataOfOption.forEach((data, index) => {
-        listOfOption.push(
-          `<option value=${data.name} data-index-channel=${index}>
-              ${data.name.toUpperCase()}
-          </option>`
-        );
-      });
+      dataOfOption.map((data, index) => listOfOption.push(option(data, index)));
 
-      if (addAllValue === true) {
-        listOfOption.unshift(
-          "<option value=all data-index-channel=all>All</option>"
-        );
-      }
+      addAllValue === true ? listOfOption.unshift(option("all", "all")) : null;
 
       return listOfOption;
     })

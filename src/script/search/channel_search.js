@@ -1,3 +1,3 @@
-import { listOfOption } from "../component/listOfOption.js";
+import { listOfOption } from "../components/listOfOption";
 
 (() => {})();

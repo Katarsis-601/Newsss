@@ -20,8 +20,10 @@ export let getAllCategories = (value) => {
       }
     }
   });
-
-  return allCategory;
+  let sortedCategory = allCategory.sort((a, b) => {
+    return a.name > b.name;
+  });
+  return sortedCategory;
 };
 
 export let getAllChannelData = (value) => {

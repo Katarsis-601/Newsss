@@ -1,4 +1,4 @@
-import listOfOption from "../component/listOfOption.js";
+import listOfOption from "../components/listOfOption.js";
 const channel_sort_element = document.getElementsByClassName("channel-sort")[0];
 
 (() => {

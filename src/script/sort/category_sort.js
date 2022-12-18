@@ -1,4 +1,4 @@
-import listOfOption from "../component/listOfOption.js";
+import listOfOption from "../components/listOfOption.js";
 import { findBySort } from "./findBySort.js";
 
 const channel_element = document.getElementsByClassName("channel-sort")[0];
@@ -14,8 +14,10 @@ let listOfCategory = (i) => {
   channel_element.addEventListener("input", (event_channel) => {
     channelSortValue =
       event_channel.target.options[channel_element.selectedIndex];
+
     listOfCategory(channelSortValue.dataset.indexChannel).then((value) => {
       category_element.innerHTML = value;
+
       categorySortValue = category_element[0].value;
       findBySort(channelSortValue.value, categorySortValue);
     });
@@ -24,6 +26,7 @@ let listOfCategory = (i) => {
   category_element.addEventListener("input", (event_category) => {
     categorySortValue =
       event_category.target.options[category_element.selectedIndex].value;
+
     findBySort(channelSortValue.value, categorySortValue);
   });
 
